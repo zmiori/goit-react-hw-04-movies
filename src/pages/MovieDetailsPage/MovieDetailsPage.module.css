@@ -1,0 +1,33 @@
+button {
+    padding: 5px 10px;
+    margin-bottom: 10px;
+}
+
+.arrowBack {
+    margin-right: 10px;
+    display: inline-block;
+    width: 10px;
+    height: 15px;
+
+
+    transform: rotate(180deg);
+}
+
+.infoWrapper {
+    display: flex;
+}
+
+.info {
+    margin-left: 15px;
+}
+
+.poster {
+width: 400px
+}
+
+.genre {
+    margin-right: 15px;
+}
+
+
+
