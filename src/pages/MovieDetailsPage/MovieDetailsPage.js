@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import {
   Route,
   Switch,
@@ -6,20 +6,23 @@ import {
   useRouteMatch,
   Link,
   useHistory,
+  useLocation,
 } from 'react-router-dom';
 import s from './MovieDetailsPage.module.css';
 import { fetchMovieDetails } from '../../services/api';
 import Separator from '../../components/Separator';
-import Cast from '../../components/Cast';
-import Reviews from '../../components/Reviews';
+// import Cast from '../../components/Cast';
+// import Reviews from '../../components/Reviews';
+const Cast = lazy(() => import('../../components/Cast'));
+const Reviews = lazy(() => import('../../components/Reviews'));
 
 export default function MovieDetailsPage() {
   const { url, path } = useRouteMatch();
   const { movieId } = useParams();
   const [movie, setMovie] = useState(null);
   const history = useHistory();
-
-  // console.log(history);
+  const location = useLocation();
+  console.log(location.pathname);
 
   useEffect(() => {
     fetchMovieDetails(movieId).then(setMovie);
@@ -77,15 +80,17 @@ export default function MovieDetailsPage() {
 
           <Separator />
 
-          <Switch>
-            <Route path={`${path}/cast`}>
-              <Cast />
-            </Route>
+          <Suspense fallback={<h1>LOADING...</h1>}>
+            <Switch>
+              <Route path={`${path}/cast`}>
+                <Cast />
+              </Route>
 
-            <Route path={`${path}/reviews`}>
-              <Reviews />
-            </Route>
-          </Switch>
+              <Route path={`${path}/reviews`}>
+                <Reviews />
+              </Route>
+            </Switch>
+          </Suspense>
         </>
       )}
     </>
