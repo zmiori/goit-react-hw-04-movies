@@ -1,4 +1,4 @@
-button {
+.btn {
     padding: 5px 10px;
     margin-bottom: 10px;
 }
@@ -22,7 +22,7 @@ button {
 }
 
 .poster {
-width: 400px
+min-width: 250px
 }
 
 .genre {

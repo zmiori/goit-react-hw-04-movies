@@ -1,12 +1,25 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import {
+  Route,
+  Switch,
+  useParams,
+  useRouteMatch,
+  Link,
+  useHistory,
+} from 'react-router-dom';
 import s from './MovieDetailsPage.module.css';
 import { fetchMovieDetails } from '../../services/api';
 import Separator from '../../components/Separator';
+import Cast from '../../components/Cast';
+import Reviews from '../../components/Reviews';
 
 export default function MovieDetailsPage() {
+  const { url, path } = useRouteMatch();
   const { movieId } = useParams();
   const [movie, setMovie] = useState(null);
+  const history = useHistory();
+
+  // console.log(history);
 
   useEffect(() => {
     fetchMovieDetails(movieId).then(setMovie);
@@ -14,7 +27,7 @@ export default function MovieDetailsPage() {
 
   return (
     <>
-      <button type="button">
+      <button type="button" className={s.btn} onClick={() => history.goBack()}>
         <svg className={s.arrowBack} viewBox="0 0 5 9">
           <path d="M0.419,9.000 L0.003,8.606 L4.164,4.500 L0.003,0.394 L0.419,0.000 L4.997,4.500 L0.419,9.000 Z"></path>
         </svg>
@@ -40,7 +53,9 @@ export default function MovieDetailsPage() {
               <h3>Genres</h3>
               <p className={s.genres}>
                 {movie.genres.map(genre => (
-                  <span className={s.genre}>{genre.name}</span>
+                  <span key={genre.name} className={s.genre}>
+                    {genre.name}
+                  </span>
                 ))}
               </p>
             </div>
@@ -50,7 +65,27 @@ export default function MovieDetailsPage() {
 
           <div className={s.additionalInfo}>
             <h4>Additional Information</h4>
+            <ul>
+              <li>
+                <Link to={`${url}/cast`}>Cast</Link>
+              </li>
+              <li>
+                <Link to={`${url}/reviews`}>Reviews</Link>
+              </li>
+            </ul>
           </div>
+
+          <Separator />
+
+          <Switch>
+            <Route path={`${path}/cast`}>
+              <Cast />
+            </Route>
+
+            <Route path={`${path}/reviews`}>
+              <Reviews />
+            </Route>
+          </Switch>
         </>
       )}
     </>
